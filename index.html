@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<body>
+
+<div ng-app="JsonFormatter" ng-controller='myCtrl'>
+ 
+<div ng-show="error" class="alert alert-danger">
+  <strong>{{error_name}}! </strong> {{error_message}}
+</div>
+
+<div class="form-group col-md-6 col-xs-12">
+	<textarea class="form-control" rows="30" ng-model="input" ng-change='updateOutput()'         ng-model-options='{ debounce: 2000 }' placeholder="Input JSON here" 
+></textarea>	
+</div>
+<div class="form-group col-md-6 col-xs-12">
+	<textarea class="form-control formtext" rows="30" ng-bind="output"></textarea>	
+</div>
+
+</div>
+
+</body>
+</html>
+<script type="text/javascript">
+	var app = angular.module("JsonFormatter",[]);
+	app.controller('myCtrl', function($scope){
+		$scope.updateOutput = function(){
+			$scope.error = false;
+			$scope.error_message = "";
+			$scope.error_name = "";
+			try{
+				json = JSON.stringify(JSON.parse($scope.input),null,2); 
+				$scope.output = json;
+				$scope.showCopyBtn = true;
+			}
+			catch(err) {
+				$scope.error = true;
+				$scope.error_name = err.name;
+				$scope.error_message = err.message;
+			}
+		}
+	})
+</script>
